@@ -58,7 +58,7 @@ class Temporal {
         $this->identifier = "temporal::" . $identifier;
         $this->initialNumber = $initialNumber;
 
-        self::$redis = $redis;
+        if (!is_null($redis)) self::$redis = $redis;
     }
 
     /**
@@ -103,18 +103,36 @@ class Temporal {
      * @param int $ttl
      * @return int
      */
-    public function register($key, $number = -1, $ttl) {
+    public function register($key, $number = -1, $ttl = 0) {
         Assertion::notNull(self::$redis, "Redis connection hasn't been set");
         Assertion::string($key, "Number key must be a string");
         Assertion::notEq($key, "", "Number key must be a non empty string");
         Assertion::integer($number, "Temporal numbers must be integers");
+        Assertion::notEq($number, 0, "Temporal numbers must be integers different from zero");
         Assertion::integer($ttl, "Time to live (ttl) must be an integer");
-        Assertion::true($ttl > 0, "Time to live (ttl) must be strictly greater than zero");
+        Assertion::true($ttl >= 0, "Time to live (ttl) must be strictly greater than zero");
 
         $key = $this->identifier . "::" . $key;
 
         self::$redis->sAdd($this->identifier, $key);
         self::$redis->set($key, $number, $ttl);
+
+        return $this->getCurrentNumber();
+    }
+
+    /**
+     * @param string $key
+     * @return int
+     */
+    public function delete($key) {
+        Assertion::notNull(self::$redis, "Redis connection hasn't been set");
+        Assertion::string($key, "Number key must be a string");
+        Assertion::notEq($key, "", "Number key must be a non empty string");
+
+        $key = $this->identifier . "::" . $key;
+
+        self::$redis->sRemove($this->identifier, $key);
+        self::$redis->delete($key);
 
         return $this->getCurrentNumber();
     }
