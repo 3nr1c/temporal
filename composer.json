@@ -1,0 +1,28 @@
+{
+	"name": "3nr1c/temporal",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Enric Florit",
+			"email": "enric@skibeta.com",
+			"homepage": "http://www.enricflorit.com",
+			"role": "Developer"
+		}
+	],
+	"description": "Temporal provides a way to modify a static number with temporal tokens using redis",
+	"require": {
+		"php": ">=5.4",
+		"beberlei/assert": "~2.4"
+	},
+	"require-dev": {
+		"phpunit/phpunit": "4.5"
+	},
+	"autoload": {
+		"psr-4": {
+			"Temporal\\": "src/Temporal/"
+		}
+	},
+	"scripts": {
+		"test": "vendor/bin/phpunit --configuration phpunit.xml"
+	}
+}
