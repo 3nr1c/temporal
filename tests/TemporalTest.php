@@ -82,9 +82,10 @@ class TemporalTest extends PHPUnit_Framework_TestCase {
     public function testTtl() {
         $temporal = new Temporal("test_ttl", 10);
         $this->assertEquals(9, $temporal->register("test1", -1, 1));
-        $this->assertEquals(9, $temporal->getCurrentNumber());
+        $this->assertEquals(5, $temporal->register("test2", -4));
+        $this->assertEquals(5, $temporal->getCurrentNumber());
         sleep(2);
-        $this->assertEquals(10, $temporal->getCurrentNumber());
+        $this->assertEquals(6, $temporal->getCurrentNumber());
     }
 
     public static function tearDownAfterClass() {
