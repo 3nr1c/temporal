@@ -136,4 +136,19 @@ class Temporal {
 
         return $this->getCurrentNumber();
     }
+
+    /**
+     * Resets the Temporal object to its initial value
+     * 
+     * @return int Returns the initial value
+     */
+    public function reset() {
+        Assertion::notNull(self::$redis, "Redis connection hasn't been set");
+
+        // Remove the set and check its emptiness
+        self::$redis->delete($this->identifier);
+        Assertion::count(self::$redis->sMembers($this->identifier), 0);
+
+        return $this->initialNumber;
+    }
 }

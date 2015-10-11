@@ -88,6 +88,17 @@ class TemporalTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(6, $temporal->getCurrentNumber());
     }
 
+    public function testReset() {
+        $temporal = new Temporal("test_reset", 10);
+        $this->assertEquals(8, $temporal->register("test1", -2));
+        $this->assertEquals(4, $temporal->register("test2", -4));
+
+        $this->assertEquals(4, $temporal->getCurrentNumber());
+
+        $this->assertEquals(10, $temporal->reset());
+        $this->assertEquals(10, $temporal->getCurrentNumber());
+    }
+
     public static function tearDownAfterClass() {
         if (class_exists("\\Redis")) {
             $redis = new \Redis();
