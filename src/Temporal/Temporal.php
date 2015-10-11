@@ -139,11 +139,15 @@ class Temporal {
 
     /**
      * Resets the Temporal object to its initial value
-     * 
+     *
      * @return int Returns the initial value
      */
     public function reset() {
         Assertion::notNull(self::$redis, "Redis connection hasn't been set");
+
+        // Remove each individual key
+        $items = self::$redis->sMembers($this->identifier);
+        foreach ($items as $i) self::$redis->delete($i);
 
         // Remove the set and check its emptiness
         self::$redis->delete($this->identifier);
