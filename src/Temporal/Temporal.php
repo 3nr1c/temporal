@@ -115,7 +115,9 @@ class Temporal {
         $key = $this->identifier . "::" . $key;
 
         self::$redis->sAdd($this->identifier, $key);
-        self::$redis->set($key, $number, $ttl);
+        ($ttl == 0) ?
+            self::$redis->set($key, $number) :
+            self::$redis->set($key, $number, $ttl);
 
         return $this->getCurrentNumber();
     }
